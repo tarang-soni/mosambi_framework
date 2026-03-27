@@ -1,0 +1,17 @@
+{
+    "name": "Mosambi.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0c03779757bf640458396f5ec5490e2b",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

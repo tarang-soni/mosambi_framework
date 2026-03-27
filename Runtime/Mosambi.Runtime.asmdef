@@ -1,0 +1,19 @@
+{
+    "name": "Mosambi.Runtime",
+    "rootNamespace": "Mosambi",
+    "references": [
+        "VContainer",
+        "UniTask",
+        "DOTween.Modules",
+        "VContainer.PersistentLifetimeScope"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

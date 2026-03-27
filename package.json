@@ -1,0 +1,15 @@
+{
+  "name": "com.mosambi.framework",
+  "version": "1.0.0",
+  "displayName": "Mosambi Framework",
+  "description": "Core architecture, pooling, DI setup, and bootstrapper.",
+  "unity": "2022.3",
+  "keywords": [
+    "framework",
+    "vcontainer",
+    "architecture"
+  ],
+  "author": {
+    "name": "Tarang Soni"
+  }
+}

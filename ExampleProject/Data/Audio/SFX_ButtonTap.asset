@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a2aab63b0db7de4fab96fc69e25ffde, type: 3}
+  m_Name: SFX_ButtonTap
+  m_EditorClassIdentifier: Assembly-CSharp::Mosambi.Core.Audio.AudioEventSO
+  clips:
+  - {fileID: 8300000, guid: cfa294a76eb9e664bb5faf6f2429e95a, type: 3}
+  mixerGroup: {fileID: 0}
+  volume: 1
+  minPitch: 0.95
+  maxPitch: 1.05
+  loop: 0
+  spatialBlend: 0
+  minDistance: 1
+  maxDistance: 50
