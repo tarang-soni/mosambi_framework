@@ -1,6 +1,6 @@
 {
   "name": "com.mosambi.framework",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "displayName": "Mosambi Framework",
   "description": "Core architecture, pooling, DI setup, and bootstrapper.",
   "unity": "2022.3",
