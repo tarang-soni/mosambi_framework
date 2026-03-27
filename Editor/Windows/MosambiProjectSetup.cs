@@ -4,17 +4,18 @@ using System.IO;
 
 namespace Mosambi.Tools.Editor
 {
-    public class MosambiSetupWizard : EditorWindow
+    public class MosambiProjectSetup : EditorWindow
     {
         private string _gameFolderName = "_Project";
         private bool _includePooling = true;
         private bool _includeAudio = true;
+        private bool _copyExampleScenes = true; // New toggle!
 
         [MenuItem("Mosambi/Framework Setup")]
         public static void ShowWindow()
         {
-            var window = GetWindow<MosambiSetupWizard>("Mosambi Setup");
-            window.minSize = new Vector2(400, 450);
+            var window = GetWindow<MosambiProjectSetup>("Mosambi Setup");
+            window.minSize = new Vector2(400, 480);
         }
 
         private void OnGUI()
@@ -31,6 +32,7 @@ namespace Mosambi.Tools.Editor
             GUILayout.Label("Modules to Initialize", EditorStyles.boldLabel);
             _includePooling = EditorGUILayout.Toggle("Pooling System", _includePooling);
             _includeAudio = EditorGUILayout.Toggle("Audio System", _includeAudio);
+            _copyExampleScenes = EditorGUILayout.Toggle("Copy Example Scenes", _copyExampleScenes); // UI for the new feature
             EditorGUILayout.EndVertical();
 
             GUILayout.FlexibleSpace();
@@ -58,19 +60,15 @@ namespace Mosambi.Tools.Editor
             string root = _gameFolderName;
 
             // --- 1. ASSETS (ART & SOUND) ---
-            // Root Assets folder for all raw/imported media
             CreateFolder($"{root}/Assets/2D/Sprites");
             CreateFolder($"{root}/Assets/2D/UI");
             CreateFolder($"{root}/Assets/3D/Models");
-
-            // Centralized Materials: Accessible by 2D, 3D, and VFX
             CreateFolder($"{root}/Assets/Materials");
-            CreateFolder($"{root}/Assets/Textures"); // Shared textures (Noise, Gradients)
-
+            CreateFolder($"{root}/Assets/Textures");
             CreateFolder($"{root}/Assets/Sounds/SFX");
             CreateFolder($"{root}/Assets/Sounds/Music");
             CreateFolder($"{root}/Assets/Fonts");
-            CreateFolder($"{root}/Assets/VFX"); // Particles and Shaders
+            CreateFolder($"{root}/Assets/VFX");
 
             // --- 2. DATA (SCRIPTABLE OBJECTS) ---
             CreateFolder($"{root}/Data/Manifests");
@@ -78,16 +76,22 @@ namespace Mosambi.Tools.Editor
             CreateFolder($"{root}/Data/Configs");
 
             // --- 3. SCRIPTS (ARCHITECTURE) ---
-            CreateFolder($"{root}/Scripts/Core");     // Framework extensions
-            CreateFolder($"{root}/Scripts/Managers"); // Singletons/LifetimeScopes
-            CreateFolder($"{root}/Scripts/Utils");    // Static helpers
-            CreateFolder($"{root}/Scripts/Gameplay"); // Game-specific logic
-            CreateFolder($"{root}/Scripts/UI");       // Menu & HUD logic
+            CreateFolder($"{root}/Scripts/Core");
+            CreateFolder($"{root}/Scripts/Managers");
+            CreateFolder($"{root}/Scripts/Utils");
+            CreateFolder($"{root}/Scripts/Gameplay");
+            CreateFolder($"{root}/Scripts/UI");
 
             // --- 4. ENGINE DEFAULTS ---
             CreateFolder($"{root}/Prefabs");
             CreateFolder($"{root}/Scenes");
-            CreateFolder($"{root}/Settings/URP"); // Renderers, Post-Processing, Lighting
+            CreateFolder($"{root}/Settings/URP");
+
+            // --- 5. COPY SCENES ---
+            if (_copyExampleScenes)
+            {
+                CopyExampleScenes(_gameFolderName);
+            }
 
             EditorPrefs.SetString($"Mosambi_Root_{Application.productName}", _gameFolderName);
 
@@ -102,6 +106,40 @@ namespace Mosambi.Tools.Editor
             if (!Directory.Exists(fullPath))
             {
                 Directory.CreateDirectory(fullPath);
+            }
+        }
+
+        private void CopyExampleScenes(string targetRootName)
+        {
+            string targetScenesFolder = $"Assets/{targetRootName}/Scenes";
+
+            // Check both possible locations (UPM Package vs Local Assets)
+            string packageSource = "Packages/com.mosambi.framework/Examples/Scenes";
+            string assetSource = "Assets/Mosambi/Examples/Scenes";
+
+            string sourceFolder = AssetDatabase.IsValidFolder(packageSource) ? packageSource : assetSource;
+
+            if (!AssetDatabase.IsValidFolder(sourceFolder))
+            {
+                Debug.LogWarning($"[Mosambi] Could not find example scenes at {packageSource} or {assetSource}. Skipping scene copy.");
+                return;
+            }
+
+            // Find all scenes in the source folder
+            string[] sceneGuids = AssetDatabase.FindAssets("t:Scene", new[] { sourceFolder });
+
+            foreach (string guid in sceneGuids)
+            {
+                string sourcePath = AssetDatabase.GUIDToAssetPath(guid);
+                string fileName = Path.GetFileName(sourcePath);
+                string targetPath = $"{targetScenesFolder}/{fileName}";
+
+                // Only copy if it doesn't already exist to prevent overwriting user work
+                if (!File.Exists(Path.Combine(Application.dataPath, $"{targetRootName}/Scenes/{fileName}")))
+                {
+                    AssetDatabase.CopyAsset(sourcePath, targetPath);
+                    Debug.Log($"<color=cyan>[Mosambi]</color> Copied {fileName} into your new project!");
+                }
             }
         }
     }
