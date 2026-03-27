@@ -114,8 +114,8 @@ namespace Mosambi.Tools.Editor
             string targetScenesFolder = $"Assets/{targetRootName}/Scenes";
 
             // Check both possible locations (UPM Package vs Local Assets)
-            string packageSource = "Packages/com.mosambi.framework/Examples/Scenes";
-            string assetSource = "Assets/Mosambi/Examples/Scenes";
+            string packageSource = "Packages/com.mosambi.framework/ExampleProject/Scenes";
+            string assetSource = "Assets/Mosambi/ExampleProject/Scenes";
 
             string sourceFolder = AssetDatabase.IsValidFolder(packageSource) ? packageSource : assetSource;
 
